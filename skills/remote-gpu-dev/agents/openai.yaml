@@ -1,0 +1,6 @@
+interface:
+  display_name: "Remote GPU Dev"
+  short_description: "Configure and safely operate remote GPU servers"
+  default_prompt: "Use $remote-gpu-dev to configure a GPU server interactively, verify SSH access, reserve GPUs safely, and run a monitored remote workload."
+policy:
+  allow_implicit_invocation: true

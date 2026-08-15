@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>remote-gpu-dev setup simulation</title>
+    <style>
+      :root { color-scheme: dark; }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: #07111f;
+        color: #dbeafe;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      }
+      .wrap { max-width: 1440px; margin: 0 auto; padding: 18px 28px; }
+      .banner {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 10px;
+        padding: 10px 18px;
+        border: 1px solid #0ea5e9;
+        border-radius: 14px;
+        background: #082f49;
+        color: #bae6fd;
+        font-weight: 800;
+        letter-spacing: .06em;
+      }
+      .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 999px;
+        background: #22c55e;
+        box-shadow: 0 0 18px #22c55e;
+      }
+      .terminal {
+        overflow: hidden;
+        border: 1px solid #334155;
+        border-radius: 16px;
+        background: #020617;
+        box-shadow: 0 24px 70px #0008;
+      }
+      .titlebar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border-bottom: 1px solid #334155;
+        background: #111827;
+      }
+      .traffic { width: 11px; height: 11px; border-radius: 50%; }
+      .red { background: #fb7185; }
+      .yellow { background: #fbbf24; }
+      .green { background: #4ade80; }
+      .tab { margin-left: 10px; color: #94a3b8; font-size: 13px; }
+      .grid { display: grid; grid-template-columns: 1fr 1fr; }
+      .pane { min-height: 0; padding: 13px 18px; }
+      .pane + .pane { border-left: 1px solid #1e293b; background: #030b18; }
+      pre {
+        margin: 0;
+        white-space: pre-wrap;
+        color: #cbd5e1;
+        font: 10.8px/1.22 "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+      }
+      .command { color: #67e8f9; }
+      .prompt { color: #93c5fd; }
+      .answer { color: #86efac; font-weight: 700; }
+      .note { color: #fcd34d; }
+      .muted { color: #64748b; }
+      .summary {
+        margin-top: 8px;
+        padding: 9px 12px;
+        border: 1px solid #14532d;
+        border-radius: 12px;
+        background: #052e16;
+        color: #bbf7d0;
+        font-size: 11px;
+        line-height: 1.3;
+      }
+      .summary strong { color: #f8fafc; }
+      .footer {
+        padding: 8px 18px;
+        border-top: 1px solid #334155;
+        background: #0f172a;
+        color: #94a3b8;
+        font-size: 11px;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <div class="banner">
+        <span class="dot"></span>
+        SIMULATED SETUP · PUBLIC EXAMPLE · NO CONNECTION ATTEMPTED
+      </div>
+      <div class="terminal">
+        <div class="titlebar">
+          <i class="traffic red"></i><i class="traffic yellow"></i><i class="traffic green"></i>
+          <span class="tab">remote-gpu-dev setup — 示例 / simulation</span>
+        </div>
+        <div class="grid">
+          <section class="pane">
+            <pre><span class="command">$ remote-gpu-dev setup</span>
+
+Remote GPU Dev 交互式初始化。
+每一步只保存非秘密配置。
+
+<span class="prompt">1/20 服务器显示名称 [GPU Server]:</span>
+<span class="answer">Example 4-GPU Lab</span>
+<span class="prompt">配置短名称 [example-4-gpu-lab]:</span>
+<span class="answer">demo-4gpu</span>
+
+<span class="prompt">2/20 SSH 主机名、IP 或 SSH config 可解析地址:</span>
+<span class="answer">gpu.example.invalid</span>
+<span class="prompt">SSH 用户名 [root]:</span> <span class="answer">researcher</span>
+<span class="prompt">SSH 端口 [22]:</span> <span class="answer">2222</span>
+<span class="prompt">可选 ProxyJump（无则留空）:</span> <span class="muted">⏎</span>
+<span class="prompt">SSH 私钥绝对路径:</span>
+<span class="answer">/home/demo/.ssh/id_ed25519_example</span>
+
+<span class="note">3/20 [模拟] 候选 host-key 指纹已通过可信渠道核对</span>
+<span class="note">4/20 [模拟] strict key-only SSH 检查通过</span>
+
+<span class="prompt">5/20 本地多项目容器目录:</span>
+<span class="answer">/home/demo/gpu-projects/demo-4gpu</span>
+<span class="prompt">6/20 本地共享工单目录:</span>
+<span class="answer">/home/demo/.local/state/remote-gpu-dev/demo-4gpu/tickets</span>
+
+<span class="prompt">7/20 远端临时/高速存储基目录:</span>
+<span class="answer">/scratch</span>
+<span class="prompt">8/20 远端持久化存储基目录:</span>
+<span class="answer">/data</span>
+<span class="prompt">确认该目录在重启/实例生命周期后仍保留数据? [Y/n]:</span>
+<span class="answer">y</span>
+<span class="note">[模拟] 将只管理派生的 temporary/durable 子目录</span></pre>
+          </section>
+          <section class="pane">
+            <pre><span class="prompt">9/20 协调范围 [single]:</span> <span class="answer">single</span>
+<span class="prompt">10/20 现有 GPU 调度器 [none]:</span> <span class="answer">none</span>
+
+<span class="prompt">11/20 由工单系统管理的 GPU 索引:</span>
+<span class="answer">0,1,2,3</span>
+<span class="prompt">12/20 使用 Conda:</span>
+<span class="answer">/opt/miniconda3/bin/conda</span>
+<span class="prompt">13/20 网络预设 [china]:</span> <span class="answer">china</span>
+<span class="prompt">14/20 允许按命令临时代理转发? [Y/n]:</span>
+<span class="answer">y</span>
+<span class="prompt">本机代理端口 [7890]:</span> <span class="answer">7890</span>
+<span class="prompt">远端 loopback 代理端口 [17890]:</span> <span class="answer">17890</span>
+<span class="prompt">15/20 服务器专属多卡环境变量:</span>
+<span class="answer">NCCL_IB_DISABLE=1</span>
+
+<span class="note">16/20 Git: durable/git/&lt;project&gt;.git</span>
+<span class="note">       + temporary/projects/&lt;project&gt; (tracked source only)</span>
+<span class="prompt">使用此 Git 布局? [Y/n]:</span> <span class="answer">y</span>
+
+<span class="prompt">17/20 本地看板端口 [8765]:</span> <span class="answer">8765</span>
+<span class="prompt">18/20 TensorBoard 远端端口池起始 [16006]:</span> <span class="answer">16006</span>
+<span class="prompt">TensorBoard 远端端口池结束 [16105]:</span> <span class="answer">16105</span>
+<span class="prompt">在专用 Conda 环境安装 nvitop? [Y/n]:</span> <span class="answer">y</span>
+<span class="prompt">19/20 工单预留 TTL（分钟） [30]:</span>
+<span class="answer">30</span>
+<span class="prompt">运行工单 heartbeat 宽限（分钟） [30]:</span>
+<span class="answer">30</span>
+
+<span class="prompt">20/20 脱敏配置摘要</span>
+  profile: <span class="answer">demo-4gpu</span>
+  server: <span class="answer">researcher@gpu.example.invalid:2222</span>
+  gpu_indices: <span class="answer">[0,1,2,3]</span>
+  ticket_root: <span class="answer">/home/demo/.local/state/.../tickets</span>
+  remote_temp_root: <span class="answer">/scratch/remote-gpu-dev/demo-4gpu</span>
+  remote_durable_root: <span class="answer">/data/remote-gpu-dev/demo-4gpu</span>
+  network.proxy_policy: <span class="answer">on-demand</span>
+  dashboard.local_port: <span class="answer">8765</span>
+<span class="prompt">确认写入 profile，并创建专用目录? [Y/n]:</span> <span class="answer">y</span></pre>
+            <div class="summary">
+              <strong>模拟完成：</strong>此页面只展示真实向导的交互顺序与公开占位值。
+              没有连接服务器、没有扫描 host key、没有写入 profile，也没有保存密码或私钥内容。
+            </div>
+          </section>
+        </div>
+        <div class="footer">
+          All hosts, users, paths and ports shown here are fictional documentation values.
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,78 @@
+{
+  "created_at": "2026-01-01T00:00:00Z",
+  "dashboard": {
+    "local_port": 8765,
+    "sample_interval_seconds": 2.0,
+    "tensorboard_remote_port_end": 16105,
+    "tensorboard_remote_port_start": 16006
+  },
+  "git": {
+    "allow_lfs": false,
+    "allow_submodules": false,
+    "max_tracked_file_mib": 10
+  },
+  "gpu": {
+    "devices": [
+      {
+        "index": 0,
+        "memory_mib": 24576,
+        "name": "Example NVIDIA GPU",
+        "uuid": "GPU-aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+      }
+    ],
+    "environment": {},
+    "heartbeat_grace_minutes": 30,
+    "ids": [
+      0
+    ],
+    "mig_mode": "disabled",
+    "reservation_ttl_minutes": 30
+  },
+  "local": {
+    "coordination_scope": "single-controller",
+    "projects_root": "/home/researcher/gpu-projects/example-gpu",
+    "proxy_host": "127.0.0.1",
+    "proxy_port": 7890,
+    "ticket_root": "/home/researcher/.local/state/remote-gpu-dev/example-gpu/tickets"
+  },
+  "name": "Example GPU Server",
+  "network": {
+    "conda_policy": "direct-then-proxy",
+    "hf_endpoint": "https://hf-mirror.com",
+    "pip_extra_index_urls": [
+      "https://pypi.tuna.tsinghua.edu.cn/simple"
+    ],
+    "pip_index_url": null,
+    "proxy_policy": "on-demand"
+  },
+  "remote": {
+    "conda_executable": "/opt/conda/bin/conda",
+    "durable_root": "/data/researcher/remote-gpu-dev/example-gpu",
+    "git_bare_root": "/data/researcher/remote-gpu-dev/example-gpu/git",
+    "monitor_python": "/data/researcher/remote-gpu-dev/example-gpu/infra/monitor-env/bin/python",
+    "projects_root": "/scratch/researcher/remote-gpu-dev/example-gpu/projects",
+    "proxy_host": "127.0.0.1",
+    "proxy_port": 17890,
+    "records_root": "/data/researcher/remote-gpu-dev/example-gpu/records",
+    "temp_root": "/scratch/researcher/remote-gpu-dev/example-gpu"
+  },
+  "schema_version": 1,
+  "slug": "example-gpu",
+  "ssh": {
+    "connect_timeout_seconds": 12,
+    "host": "gpu.example.test",
+    "identity_file": "/home/researcher/.ssh/id_ed25519_example_gpu",
+    "known_hosts_file": "/home/researcher/.config/remote-gpu-dev/known_hosts/example-gpu",
+    "port": 22,
+    "proxy_jump": null,
+    "user": "researcher"
+  },
+  "trust": {
+    "coordination_uid": "sha256:2165a9370d5806b0eaf0bc7c465aa79baae109680c69f682f63aa52a6433fa28",
+    "host_key_fingerprints": [
+      "SHA256:abcdefghijklmnopqrstuvwx"
+    ],
+    "remote_machine_id_sha256": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+    "server_uid": "sha256:4ab5f260773db0e854050547d86941c2a2059d4d0e5b431487086d6a0576f30f"
+  }
+}

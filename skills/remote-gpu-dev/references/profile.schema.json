@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.test/remote-gpu-dev/profile.schema.json",
+  "title": "remote-gpu-dev server profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "name",
+    "slug",
+    "created_at",
+    "trust",
+    "ssh",
+    "local",
+    "remote",
+    "gpu",
+    "network",
+    "git",
+    "dashboard"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "name": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "slug": { "type": "string", "pattern": "^[a-z0-9](?:[a-z0-9-]{0,46}[a-z0-9])?$" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "trust": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["server_uid", "coordination_uid", "host_key_fingerprints", "remote_machine_id_sha256"],
+      "properties": {
+        "server_uid": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "coordination_uid": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "host_key_fingerprints": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^SHA256:[A-Za-z0-9+/]{20,60}$" }
+        },
+        "remote_machine_id_sha256": {
+          "type": ["string", "null"],
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      }
+    },
+    "ssh": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["host", "user", "port", "identity_file", "known_hosts_file", "connect_timeout_seconds", "proxy_jump"],
+      "properties": {
+        "host": { "type": "string", "minLength": 1, "maxLength": 253 },
+        "user": { "type": "string", "pattern": "^[A-Za-z0-9._-]{1,64}$" },
+        "port": { "type": "integer", "minimum": 1, "maximum": 65535 },
+        "identity_file": { "$ref": "#/$defs/absoluteLocalPath" },
+        "known_hosts_file": { "$ref": "#/$defs/absoluteLocalPath" },
+        "connect_timeout_seconds": { "type": "integer", "minimum": 2, "maximum": 120 },
+        "proxy_jump": { "type": ["string", "null"], "maxLength": 255 }
+      }
+    },
+    "local": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["projects_root", "ticket_root", "coordination_scope", "proxy_host", "proxy_port"],
+      "properties": {
+        "projects_root": { "$ref": "#/$defs/absoluteLocalPath" },
+        "ticket_root": { "$ref": "#/$defs/absoluteLocalPath" },
+        "coordination_scope": { "enum": ["single-controller", "shared-filesystem"] },
+        "proxy_host": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "proxy_port": { "$ref": "#/$defs/port" }
+      }
+    },
+    "remote": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["temp_root", "durable_root", "git_bare_root", "projects_root", "records_root", "conda_executable", "monitor_python", "proxy_host", "proxy_port"],
+      "properties": {
+        "temp_root": { "$ref": "#/$defs/absoluteRemotePath" },
+        "durable_root": { "$ref": "#/$defs/absoluteRemotePath" },
+        "git_bare_root": { "$ref": "#/$defs/absoluteRemotePath" },
+        "projects_root": { "$ref": "#/$defs/absoluteRemotePath" },
+        "records_root": { "$ref": "#/$defs/absoluteRemotePath" },
+        "conda_executable": { "$ref": "#/$defs/absoluteRemotePath" },
+        "monitor_python": { "$ref": "#/$defs/absoluteRemotePath" },
+        "proxy_host": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "proxy_port": { "type": "integer", "minimum": 1024, "maximum": 65535 }
+      }
+    },
+    "gpu": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ids", "devices", "reservation_ttl_minutes", "heartbeat_grace_minutes", "environment", "mig_mode"],
+      "properties": {
+        "ids": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "integer", "minimum": 0 } },
+        "devices": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["index", "uuid", "name", "memory_mib"],
+            "properties": {
+              "index": { "type": "integer", "minimum": 0 },
+              "uuid": { "type": "string", "pattern": "^(?:GPU|MIG)-[A-Za-z0-9-]{8,120}$" },
+              "name": { "type": "string", "minLength": 1, "maxLength": 160 },
+              "memory_mib": { "type": "integer", "minimum": 1 }
+            }
+          }
+        },
+        "reservation_ttl_minutes": { "type": "integer", "minimum": 1, "maximum": 1440 },
+        "heartbeat_grace_minutes": { "type": "integer", "minimum": 1, "maximum": 1440 },
+        "environment": { "type": "object", "propertyNames": { "pattern": "^[A-Z_][A-Z0-9_]{0,63}$" }, "additionalProperties": { "type": "string", "maxLength": 512 } },
+        "mig_mode": { "enum": ["disabled", "unsupported"] }
+      }
+    },
+    "network": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hf_endpoint", "pip_index_url", "pip_extra_index_urls", "conda_policy", "proxy_policy"],
+      "properties": {
+        "hf_endpoint": { "type": ["string", "null"], "maxLength": 500 },
+        "pip_index_url": { "type": ["string", "null"], "maxLength": 500 },
+        "pip_extra_index_urls": { "type": "array", "maxItems": 8, "items": { "type": "string", "maxLength": 500 } },
+        "conda_policy": { "enum": ["direct", "direct-then-proxy", "proxy"] },
+        "proxy_policy": { "enum": ["disabled", "on-demand"] }
+      }
+    },
+    "git": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allow_lfs", "allow_submodules", "max_tracked_file_mib"],
+      "properties": {
+        "allow_lfs": { "type": "boolean" },
+        "allow_submodules": { "type": "boolean" },
+        "max_tracked_file_mib": { "type": "integer", "minimum": 1, "maximum": 1024 }
+      }
+    },
+    "dashboard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["local_port", "sample_interval_seconds", "tensorboard_remote_port_start", "tensorboard_remote_port_end"],
+      "properties": {
+        "local_port": { "type": "integer", "minimum": 1024, "maximum": 65535 },
+        "sample_interval_seconds": { "type": "number", "minimum": 0.5, "maximum": 60 },
+        "tensorboard_remote_port_start": { "type": "integer", "minimum": 1024, "maximum": 65535 },
+        "tensorboard_remote_port_end": { "type": "integer", "minimum": 1024, "maximum": 65535 }
+      }
+    }
+  },
+  "$defs": {
+    "port": { "type": "integer", "minimum": 1, "maximum": 65535 },
+    "absoluteLocalPath": { "type": "string", "pattern": "^/[^\\u0000-\\u001f]+$" },
+    "absoluteRemotePath": { "type": "string", "pattern": "^/(?!$)(?!/)(?!.*(?:^|/)\\.\\.?/)[^\\u0000-\\u001f]+$" }
+  }
+}

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Remote GPU Dev 看板</title>
+    <link rel="stylesheet" href="app.css">
+  </head>
+  <body>
+    <main>
+      <header class="hero">
+        <div>
+          <p class="eyebrow">GPU TICKETS READ-ONLY · TENSORBOARD USER CONTROL</p>
+          <h1>GPU 调度看板</h1>
+          <p class="subtitle">工单占用、远端 nvitop 指标与实验 TensorBoard 的实时对账视图</p>
+        </div>
+        <div class="connection">
+          <span id="live-dot" class="dot waiting"></span>
+          <div>
+            <strong id="connection-label">正在连接</strong>
+            <span id="last-update">等待首个快照</span>
+          </div>
+        </div>
+      </header>
+
+      <section id="warnings" class="warnings" aria-live="polite"></section>
+
+      <section>
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">LIVE TELEMETRY</p>
+            <h2>服务器 GPU</h2>
+          </div>
+          <span id="server-label" class="muted">—</span>
+        </div>
+        <div id="gpu-grid" class="gpu-grid"></div>
+      </section>
+
+      <section class="ticket-layout">
+        <article class="panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">ALLOCATIONS</p>
+              <h2>持有态工单</h2>
+            </div>
+            <span id="active-count" class="count">0</span>
+          </div>
+          <div id="active-tickets" class="ticket-list"></div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">QUEUE</p>
+              <h2>等待队列</h2>
+            </div>
+            <span id="queue-count" class="count">0</span>
+          </div>
+          <div id="queued-tickets" class="ticket-list"></div>
+        </article>
+      </section>
+
+      <section id="tensorboard-panel" class="panel tensorboard-panel" aria-labelledby="tensorboard-title" hidden>
+        <div class="panel-heading tensorboard-heading">
+          <div>
+            <p class="eyebrow">EXPERIMENT MONITOR</p>
+            <h2 id="tensorboard-title">实验 TensorBoard</h2>
+          </div>
+          <div class="tensorboard-heading-actions">
+            <span id="tensorboard-status" class="tensorboard-status unknown">未知</span>
+            <button id="tensorboard-lifecycle" class="lifecycle-button" type="button" hidden>启动 TensorBoard</button>
+            <button id="tensorboard-close" class="icon-button" type="button" aria-label="仅隐藏 TensorBoard 面板">隐藏面板</button>
+          </div>
+        </div>
+        <p id="tensorboard-meta" class="tensorboard-meta"></p>
+        <p id="tensorboard-control-message" class="tensorboard-control-message" aria-live="polite"></p>
+        <div class="tensorboard-viewport">
+          <div id="tensorboard-empty" class="tensorboard-empty" role="status">
+            <strong id="tensorboard-empty-title">等待选择实验</strong>
+            <span id="tensorboard-empty-detail">从工单中打开一个 TensorBoard。</span>
+          </div>
+          <iframe
+            id="tensorboard-frame"
+            title="实验 TensorBoard"
+            loading="lazy"
+            referrerpolicy="no-referrer"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-downloads"
+            hidden
+          ></iframe>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">EXPERIMENT HISTORY</p>
+            <h2>历史实验</h2>
+          </div>
+          <span class="muted">全部终态工单</span>
+        </div>
+        <div id="recent-tickets" class="recent-list"></div>
+      </section>
+
+      <footer>
+        <span>GPU 分配与排队状态只读；TensorBoard 操作会更新本地工单中的 viewer 元数据，并且只管理本看板创建的 generation 与 SSH 转发。</span>
+        <span id="collector-label">nvitop —</span>
+      </footer>
+    </main>
+    <script src="app.js" defer></script>
+  </body>
+</html>

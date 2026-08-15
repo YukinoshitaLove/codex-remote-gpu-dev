@@ -1,0 +1,33 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Public tree
+        run: python3 tools/check_public_tree.py
+      - name: Installable Skill source
+        run: python3 tools/manage_install.py validate-source
+      - name: Python syntax
+        run: PYTHONDONTWRITEBYTECODE=1 python3 -m py_compile skills/remote-gpu-dev/scripts/*.py
+      - name: Shell syntax
+        run: bash -n skills/remote-gpu-dev/scripts/ssh_remote.sh
+      - name: Dashboard JavaScript syntax
+        run: node --check skills/remote-gpu-dev/assets/dashboard/app.js
+      - name: Tests
+        run: PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
