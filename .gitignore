@@ -38,3 +38,7 @@ weights/
 .conda/
 .venv/
 venv/
+
+.idea/
+.vscode/
+*.iml
