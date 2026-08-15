@@ -32,6 +32,24 @@ def runtime_object(*pairs: tuple[str, object]) -> dict[str, object]:
     return dict(pairs)
 
 
+def _dynamic_concat_chain(size: int) -> ast.Module:
+    """Return the tree for ``payload = dynamic()`` followed by ``size`` ``+'x'``."""
+
+    value: ast.expr = ast.Call(
+        func=ast.Name(id="dynamic", ctx=ast.Load()), args=[], keywords=[]
+    )
+    for _ in range(size):
+        value = ast.BinOp(left=value, op=ast.Add(), right=ast.Constant(value="x"))
+    return ast.Module(
+        body=[
+            ast.Assign(
+                targets=[ast.Name(id="payload", ctx=ast.Store())], value=value
+            )
+        ],
+        type_ignores=[],
+    )
+
+
 def png_chunk(chunk_type: bytes, data: bytes) -> bytes:
     return (
         struct.pack(">I", len(data))
@@ -537,8 +555,10 @@ class PublicTreeTests(unittest.TestCase):
     def test_static_text_collector_growth_is_bounded(self) -> None:
         elapsed: list[float] = []
         for size in (2_000, 8_000):
-            source = "payload = dynamic()" + "+'x'" * size + "\n"
-            tree = ast.parse(source)
+            # Build the left-leaning ``dynamic()+'x'+'x'...`` chain directly:
+            # Python 3.11's parser exhausts its recursion limit on this depth,
+            # and the collector under test is what needs the deep tree.
+            tree = _dynamic_concat_chain(size)
             started = time.perf_counter()
             tuple(check_public_tree._iter_maximal_static_text_values(tree))
             elapsed.append(time.perf_counter() - started)
